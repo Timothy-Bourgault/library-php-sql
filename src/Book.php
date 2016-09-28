@@ -28,8 +28,11 @@
         function getNumberOfCopies()
         {
             $returned_copies = $GLOBALS['DB']->query("SELECT * FROM copies WHERE book_id = {$this->id};");
-            $number_of_copies = count($returned_copies);
-            return $number_of_copies;
+            $i = 0;
+            foreach ($returned_copies as $copy){
+                $i++;
+            }
+            return $i;
         }
 
         function getBooksAuthors()
@@ -62,7 +65,8 @@
         {
             $GLOBALS['DB']->exec("INSERT INTO books (title) VALUES ('{$this->title}');");
             $this->id = $GLOBALS['DB']->lastInsertId();
-            $GLOBALS['DB']->exec("INSERT INTO copies (book_id) VALUES ({$this->id});");
+            $copy = new Copy($this->id);
+            $copy->save();
         }
 
         static function getAll()
@@ -94,6 +98,24 @@
         {
             $GLOBALS['DB']->exec("DELETE FROM books WHERE id = {$this->id};");
             $GLOBALS['DB']->exec("DELETE FROM copies WHERE book_id = {$this->id};");
+        }
+
+        function addCopy()
+        {
+            $newCopy = new Copy($this->id);
+            $newCopy->save();
+        }
+
+        function getAvailableCopy()
+        {
+            $copies = Copy::getAll();
+            foreach ($copies as $copy){
+                if($copy->getBookId() == $this->id && $copy->getStatus() == "available") {
+                    $copy_id = $copy->getId();
+                    return $copy_id;
+                }
+            }
+            return null;
         }
 
         static function find($search)

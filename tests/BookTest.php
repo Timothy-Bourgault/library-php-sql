@@ -7,6 +7,8 @@
     //export PATH=$PATH:./vendor/bin
     //phpunit tests
     require_once "src/Book.php";
+    require_once "src/Copy.php";
+    require_once "src/Author.php";
     $server = 'mysql:host=localhost;dbname=library_test';
     $username = 'root';
     $password = 'root';
@@ -18,6 +20,8 @@
         protected function tearDown()
         {
             Book::deleteAll();
+            Copy::deleteAll();
+            Author::deleteAll();
         }
 
         function test_getTitle()
@@ -117,6 +121,28 @@
             $output = $test_book->getNumberOfCopies();
 
             $this->assertEquals(1, $output);
+        }
+
+        function test_addCopy()
+        {
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+            $test_book->addCopy();
+
+            $output = $test_book->getNumberOfCopies();
+
+            $this->assertEquals(2, $output);
+
+        }
+
+        function test_getAvailableCopy()
+        {
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+
+            $copy_id = $test_book->getAvailableCopy();
+
+            $this->assertTrue(is_numeric($copy_id));
         }
 
     }

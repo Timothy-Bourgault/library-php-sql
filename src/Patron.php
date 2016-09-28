@@ -78,5 +78,19 @@
             return $found_patron;
         }
 
+        function checkoutCopy($book)
+        {
+            $copy_id = $book->getAvailableCopy();
+            if ($copy_id){
+                $GLOBALS['DB']->exec("INSERT INTO checkouts (copy_id, patron_id) VALUES ({$copy_id}, {$this->getId()});");
+                $GLOBALS['DB']->exec("UPDATE copies SET status = 'unavailable' WHERE id = {$copy_id};");
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+
+
     }
 ?>

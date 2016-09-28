@@ -7,6 +7,9 @@
     //export PATH=$PATH:./vendor/bin
     //phpunit tests
     require_once "src/Patron.php";
+    require_once "src/Book.php";
+    require_once "src/Copy.php";
+    require_once "src/Author.php";
     $server = 'mysql:host=localhost;dbname=library_test';
     $username = 'root';
     $password = 'root';
@@ -17,6 +20,9 @@
 
         protected function tearDown()
         {
+            Book::deleteAll();
+            Copy::deleteAll();
+            Author::deleteAll();
             Patron::deleteAll();
         }
 
@@ -44,7 +50,7 @@
             //Assert
             $this->assertEquals($test_patron, $output[0]);
         }
-
+        
         function test_update_name()
         {
             //Arrange
@@ -92,6 +98,21 @@
             $output = Patron::find($test_patron->getName());
 
             $this->assertEquals($test_patron, $output);
+
+        }
+
+        function test_checkOut()
+        {
+            $test_patron = new Patron("Bob Jones");
+            $test_patron->save();
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+            $test_author = new Author("Herman Melville");
+            $test_author->save();
+
+            $output = $test_patron->checkoutCopy($test_book);
+
+            $this->assertEquals(1, $output);
 
         }
 
