@@ -95,6 +95,30 @@
 
         }
 
+        function test_addAuthor()
+        {
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+            $test_author = new Author("Herman Melville");
+            $test_author->save();
+
+            $test_book->addAuthor($test_author);
+            $output = $test_book->getBooksAuthors();
+
+            $this->assertEquals([$test_author], $output);
+
+        }
+
+        function test_getNumberOfCopies()
+        {
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+
+            $output = $test_book->getNumberOfCopies();
+
+            $this->assertEquals(1, $output);
+        }
+
     }
         // export PATH=$PATH:./vendor/bin first and then you will only have to run  $ phpunit tests
 ?>

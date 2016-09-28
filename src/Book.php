@@ -25,6 +25,34 @@
             return $this->title;
         }
 
+        function getNumberOfCopies()
+        {
+            $returned_copies = $GLOBALS['DB']->query("SELECT * FROM copies WHERE book_id = {$this->id};");
+            $number_of_copies = count($returned_copies);
+            return $number_of_copies;
+        }
+
+        function getBooksAuthors()
+        {
+            $returned_books_authors = $GLOBALS['DB']->query("SELECT authors.* FROM authors
+                JOIN authors_books ON (authors_books.author_id = authors.id)
+                JOIN books ON (authors_books.book_id = books.id)
+                WHERE books.id = {$this->getId()};");
+            $authors = array();
+            foreach($returned_books_authors as $author) {
+                $name = $author['name'];
+                $id = $author['id'];
+                $new_author = new Author($name, $id);
+                array_push($authors, $new_author);
+            }
+            return $authors;
+        }
+
+        function addAuthor($author)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO authors_books (book_id, author_id) VALUES ({$this->id}, {$author->getId()});");
+        }
+
         function setTitle($new_title)
         {
             $this->title = $new_title;
