@@ -90,5 +90,10 @@
             return $copy_ids;
         }
 
+        function updateCopyStatus()
+        {
+            $GLOBALS['DB']->query("SELECT * FROM checkouts WHERE copy_id = {$this->id}";);
+
+        }
     }
 ?>
