@@ -2,11 +2,11 @@
     class Book
     {
         private $id;
-        private $name;
+        private $title;
 
-        function __construct($name, $id = null)
+        function __construct($title, $id = null)
         {
-           $this->name = $name;
+           $this->title = $title;
            $this->id = $id;
         }
 
@@ -20,30 +20,62 @@
             $this->id = $new_id;
         }
 
-        function getName()
+        function getTitle()
         {
-            return $this->name;
+            return $this->title;
         }
 
-        function setName($new_name)
+        function setTitle($new_title)
         {
-            $this->name = $new_name;
+            $this->title = $new_title;
         }
 
         function save()
         {
-
+            $GLOBALS['DB']->exec("INSERT INTO books (title) VALUES ('{$this->title}');");
+            $this->id = $GLOBALS['DB']->lastInsertId();
         }
 
         static function getAll()
         {
-
+            $returned_books = $GLOBALS['DB']->query('SELECT * FROM books;');
+                $book_array = array();
+                foreach($returned_books as $book) {
+                    $title = $book['title'];
+                    $id = $book['id'];
+                    $new_book = new Book($title, $id);
+                    array_push($book_array, $new_book);
+                }
+                return $book_array;
         }
 
         static function deleteAll()
         {
-
+            $GLOBALS['DB']->exec("DELETE FROM books;");
         }
 
+        function updateTitle($new_title)
+        {
+            $GLOBALS['DB']->exec("UPDATE books SET title = '{$new_title}' WHERE id = {$this->id};");
+            $this->title = $new_title;
+        }
+
+        function delete()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM books WHERE id = {$this->id};");
+        }
+
+        static function find($search)
+        {
+            $books = Book::getAll();
+            $found_book = null;
+            foreach ($books as $book)
+            {
+                if ($book->getId() == $search || $book->getTitle() == $search ){
+                    $found_book = $book;
+                }
+            }
+            return $found_book;
+        }
     }
 ?>

@@ -14,6 +14,7 @@ _This application is . It from user's form inputs._
 | Select a book from the catalog | "Moby Dick" | "Moby Dick", id |
 | Update a book in the catalog | rename "Moby Dick" to "The Great Gatsby" | "The Great Gatsby" |
 | Remove a book from the catalog | remove "Moby Dick" | nothing in catalog |
+| Search for a book by id | find book 1 | "Moby Dick" |
 | Search for a book by title | find "Moby Dick" | "Moby Dick" |
 | Add an author | "Herman Melville" | "Herman Melville" |
 | Select an author | "Herman Melville" | "Herman Melville", id |

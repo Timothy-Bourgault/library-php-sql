@@ -32,18 +32,50 @@
 
         function save()
         {
-
+            $GLOBALS['DB']->exec("INSERT INTO authors (name) VALUES ('{$this->name}');");
+            $this->id = $GLOBALS['DB']->lastInsertId();
         }
 
         static function getAll()
         {
-
+            $returned_authors = $GLOBALS['DB']->query('SELECT * FROM authors;');
+                $author_array = array();
+                foreach($returned_authors as $author) {
+                    $name = $author['name'];
+                    $id = $author['id'];
+                    $new_author = new Author($name, $id);
+                    array_push($author_array, $new_author);
+                }
+                return $author_array;
         }
 
         static function deleteAll()
         {
-
+            $GLOBALS['DB']->exec("DELETE FROM authors;");
         }
 
+        function updateName($new_name)
+        {
+            $GLOBALS['DB']->exec("UPDATE authors SET name = '{$new_name}' WHERE id = {$this->id};");
+            $this->name = $new_name;
+        }
+
+        function delete()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM authors WHERE id = {$this->id};");
+        }
+
+        static function find($search)
+        {
+            $authors = Author::getAll();
+            $found_author = null;
+            foreach ($authors as $author)
+            {
+                if ($author->getId() == $search || $author->getName() == $search ){
+                    $found_author = $author;
+                }
+            }
+            return $found_author;
+        }
     }
 ?>
