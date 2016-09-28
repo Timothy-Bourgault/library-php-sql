@@ -22,7 +22,7 @@ _This application is . It from user's form inputs._
 | Remove an author | remove "Herman Melville" | nothing in catalog |
 | Add an author to a title | "Moby Dick" by "Herman Melville" | "Moby Dick" - "Herman Melville" |
 | Search for a book by author | "Herman Melville" | "Moby Dick"|
-| Adjust number of copies of a book in the library | add a second copy of "Moby Dick" | copies: 2|
+| Adjust number of copies of a book in the library | add a second copy of "Moby Dick" | copies: 2 |
 | Add a title for an author | add "The Great Gatsby" for "F. Scott Fitzgerald" | "The Great Gatsby"|
 | Check out a copy of a book | Bill checks out Moby Dick | Bill's Books: Moby Dick, 2016-10-05, "checked out" |
 | Check out a copy of a book | Bill checks out Moby Dick | Bill's Books: Moby Dick, 2016-10-05, "checked out" |

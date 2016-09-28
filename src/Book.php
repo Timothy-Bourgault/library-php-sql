@@ -34,6 +34,7 @@
         {
             $GLOBALS['DB']->exec("INSERT INTO books (title) VALUES ('{$this->title}');");
             $this->id = $GLOBALS['DB']->lastInsertId();
+            $GLOBALS['DB']->exec("INSERT INTO copies (book_id) VALUES ({$this->id});");
         }
 
         static function getAll()
@@ -52,6 +53,7 @@
         static function deleteAll()
         {
             $GLOBALS['DB']->exec("DELETE FROM books;");
+            $GLOBALS['DB']->exec("DELETE FROM copies;");
         }
 
         function updateTitle($new_title)
@@ -63,6 +65,7 @@
         function delete()
         {
             $GLOBALS['DB']->exec("DELETE FROM books WHERE id = {$this->id};");
+            $GLOBALS['DB']->exec("DELETE FROM copies WHERE book_id = {$this->id};");
         }
 
         static function find($search)
@@ -71,7 +74,7 @@
             $found_book = null;
             foreach ($books as $book)
             {
-                if ($book->getId() == $search || $book->getTitle() == $search ){
+                if ($book->getId() == $search || $book->getTitle() == $search) {
                     $found_book = $book;
                 }
             }

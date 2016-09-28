@@ -39,14 +39,14 @@
         static function getAll()
         {
             $returned_authors = $GLOBALS['DB']->query('SELECT * FROM authors;');
-                $author_array = array();
-                foreach($returned_authors as $author) {
-                    $name = $author['name'];
-                    $id = $author['id'];
-                    $new_author = new Author($name, $id);
-                    array_push($author_array, $new_author);
-                }
-                return $author_array;
+            $author_array = array();
+            foreach($returned_authors as $author) {
+                $name = $author['name'];
+                $id = $author['id'];
+                $new_author = new Author($name, $id);
+                array_push($author_array, $new_author);
+            }
+            return $author_array;
         }
 
         static function deleteAll()
@@ -76,6 +76,27 @@
                 }
             }
             return $found_author;
+        }
+
+        function addBook($new_book)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO authors_books (book_id, author_id) VALUES ({$new_book->getId()}, {$this->id});");
+        }
+
+        function getAuthorsBooks()
+        {
+            $returned_authors_books = $GLOBALS['DB']->query("SELECT books.* FROM authors
+                JOIN authors_books ON (authors_books.author_id = authors.id)
+                JOIN books ON (authors_books.book_id = books.id)
+                WHERE authors.id = {$this->getId()};");
+            $books = array();
+            foreach($returned_authors_books as $book) {
+                $title = $book['title'];
+                $id = $book['id'];
+                $new_book = new Book($title, $id);
+                array_push($books, $new_book);
+            }
+            return $books;
         }
     }
 ?>

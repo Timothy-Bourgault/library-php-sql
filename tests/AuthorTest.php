@@ -7,6 +7,7 @@
     //export PATH=$PATH:./vendor/bin
     //phpunit tests
     require_once "src/Author.php";
+    require_once "src/Book.php";
     $server = 'mysql:host=localhost;dbname=library_test';
     $username = 'root';
     $password = 'root';
@@ -92,8 +93,24 @@
             $output = Author::find($test_author->getName());
 
             $this->assertEquals($test_author, $output);
-
         }
+
+        function test_addBook()
+        {
+            //Arrange
+            $test_author = new Author("Herman Melville");
+            $test_author->save();
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+
+            //Act
+            $test_author->addBook($test_book);
+            $output = $test_author->getAuthorsBooks();
+
+            //Assert
+            $this->assertEquals([$test_book], $output);
+        }
+
 
     }
         // export PATH=$PATH:./vendor/bin first and then you will only have to run  $ phpunit tests
