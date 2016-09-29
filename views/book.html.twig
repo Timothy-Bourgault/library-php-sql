@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Library</title>
+    </head>
+    <body>
+        <h1>{{ book.getTitle }}</h1>
+        {% for author in authors %}
+            <h2>{{ author.getName }}</h2>
+        {% endfor %}
+        {% for copy in copies %}
+            <h2>{{ copy.id }} - {{ copy.status }}</h2>
+        {% endfor %}
+        <form action="index.html" method="post">
+            <label for="add_author">Add Author</label>
+            <select name="author_id" class="form-control">
+                {% for author in all_authors %}
+                    <option value="{{ author.getId }}">{{ author.getName }}</option>
+                {% endfor %}
+            </select>
+            <input type="hidden" name="book_id" value="{{ book.getId }}">
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </body>
+</html>

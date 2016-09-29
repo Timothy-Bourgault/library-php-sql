@@ -9,6 +9,7 @@
     require_once "src/Book.php";
     require_once "src/Copy.php";
     require_once "src/Author.php";
+    require_once "src/Patron.php";
     $server = 'mysql:host=localhost;dbname=library_test';
     $username = 'root';
     $password = 'root';
@@ -22,6 +23,7 @@
             Book::deleteAll();
             Copy::deleteAll();
             Author::deleteAll();
+            Patron::deleteAll();
         }
 
         function test_getTitle()
@@ -143,6 +145,21 @@
             $copy_id = $test_book->getAvailableCopy();
 
             $this->assertTrue(is_numeric($copy_id));
+        }
+
+        function test_getCopyInfo()
+        {
+            $test_patron = new Patron("Bob Jones");
+            $test_patron->save();
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+
+
+            $test_patron->checkoutCopy($test_book);
+
+            $copy = $test_book->getCopies()[0];
+            $result = $test_book->getCopyInfo();
+            $this->assertEquals([['status' => 'checked out', 'copy_id' => $copy->getId(), 'due_date' => '2016-10-20', 'patron_id' => $test_patron->getId()]], $result);
         }
 
     }

@@ -68,6 +68,13 @@
         return $app->redirect("/");
     });
 
+    $app->get("/book/{id}", function($id) use ($app) {
+        $all_authors = Author::getAll();
+        $book = Book::find($id);
+        $authors = $book->getBooksAuthors();
+        $copies = $book->getCopyInfo();
+        return $app['twig']->render('book.html.twig', array('book' => $book, 'authors' => $authors, 'copies' => $copies, 'all_authors' => $all_authors));
+    });
 
 
     return $app;

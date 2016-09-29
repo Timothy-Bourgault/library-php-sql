@@ -56,6 +56,11 @@
             $GLOBALS['DB']->exec("INSERT INTO authors_books (book_id, author_id) VALUES ({$this->id}, {$author->getId()});");
         }
 
+        function addAuthorbyId($author_id)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO authors_books (book_id, author_id) VALUES ({$this->id}, {$author_id});");
+        }
+
         function setTitle($new_title)
         {
             $this->title = $new_title;
@@ -128,6 +133,17 @@
                 }
             }
             return $book_copies;
+        }
+
+        function getCopyInfo()
+        {
+            $returned_info = $GLOBALS['DB']->query("SELECT * FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) WHERE (copies.book_id = {$this->id});");
+            $info_array = array();
+            foreach($returned_info as $info){
+                $entry = array('status' => $info['copies.status'], 'copy_id' => $info['copies.id'], 'due_date' => $info['checkouts.due_date'], 'patron_id' => $info['checkouts.patron_id']);
+                array_push($info_array, $entry);
+            }
+            return $info_array;
         }
 
         static function find($search)
