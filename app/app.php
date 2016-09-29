@@ -30,7 +30,8 @@
         $books = Book::getAll();
         $authors = Author::getAll();
         $patrons = Patron::getAll();
-        return $app['twig']->render('index.html.twig', array('books' => $books, 'authors' => $authors, 'patrons' => $patrons));
+        $result_array = array();
+        return $app['twig']->render('index.html.twig', array('books' => $books, 'authors' => $authors, 'patrons' => $patrons, 'result_array' =>  $result_array));
     });
 
     $app->post("/add_book", function() use ($app) {
@@ -121,6 +122,15 @@
         $copy = Copy::find($copyId);
         $copy->returnCopy();
         return $app->redirect($app['url_generator']->generate('patron', array('id' => $patronId)));
+    });
+
+    $app->post("/search", function() use($app) {
+        $title = $_POST['book_title'];
+        $result_array = Book::searchTitle($title);
+        $books = Book::getAll();
+        $authors = Author::getAll();
+        $patrons = Patron::getAll();
+        return $app['twig']->render('index.html.twig', array('books' => $books, 'authors' => $authors, 'patrons' => $patrons, 'result_array' => $result_array));
     });
 
 

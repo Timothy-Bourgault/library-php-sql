@@ -50,6 +50,18 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="row">
+                <form action="/search" method="post">
+                    <h1>Search for a book by title:</h1>
+                    <input type="text" name="book_title" required>
+                    <button type="submit" name="button">Search</button>
+                </form>
+            </div>
+            {% if result_array %}
+                {% for result in result_array %}
+                     <li><a href="/book/{{ result.getId }}">{{ result.getTitle }}</a></li>
+                {% endfor %}
+            {% endif %}
         </div>
     </body>
 </html>
