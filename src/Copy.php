@@ -103,6 +103,19 @@
             $this->status = "available";
         }
 
+        static function find($search)
+        {
+            $copies = Copy::getAll();
+            $found_copy = null;
+            foreach ($copies as $copy)
+            {
+                if ($copy->getId() == $search) {
+                    $found_copy = $copy;
+                }
+            }
+            return $found_copy;
+        }
+
         static function updatePastDue()
         {
             $checked_out_copies = $GLOBALS['DB']->query("SELECT checkouts.* FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) WHERE copies.status = 'checked out';");

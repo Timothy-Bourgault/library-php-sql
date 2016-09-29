@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Welcome to Epic Library</h1>
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>Books</h3>
+                    <form action="/add_book" method="post">
+                        <h5>Add Book</h5>
+                        <input class="form-control" type="text" name="new_book" value="" placeholder="Title">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                    {% if books %}
+                        {% for book in books %}
+                              <li><a href="/book/{{ book.getId }}">{{ book.getTitle }}</a></li>
+                        {% endfor %}
+                        <a href="/delete_all_books"><button type="button">Delete All</button></a>
+                    {% endif %}
+                </div>
+                <div class="col-sm-4">
+                    <h3>Authors</h3>
+                    <h5>Add Author</h5>
+                    <form action="/add_author" method="post">
+                        <input class="form-control" type="text" name="new_author" value="" placeholder="Name">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                    {% if authors %}
+                        {% for author in authors %}
+                              <a href="/author/{{ author.getId }}"><li>{{ author.getName }}</li></a>
+                        {% endfor %}
+                        <a href="/delete_all_authors"><button type="button">Delete All</button></a>
+                    {% endif %}
+                </div>
+                <div class="col-sm-4">
+                    <h3>Patrons</h3>
+                    <form action="/add_patron" method="post">
+                        <h5>Add Patron</h5>
+                        <input class="form-control" type="text" name="new_patron" value="" placeholder="Name">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                    {% if patrons %}
+                        {% for patron in patrons %}
+                              <a href="/patron/{{ patron.getId }}"><li>{{ patron.getName }}</li></a>
+                        {% endfor %}
+                        <a href="/delete_all_patrons"><button type="button">Delete All</button></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
