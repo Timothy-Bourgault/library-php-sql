@@ -97,6 +97,12 @@
 
         }
 
+        function returnCopy()
+        {
+            $GLOBALS['DB']->exec("UPDATE copies SET status = 'available' WHERE id = {$this->id};");
+            $this->status = "available";
+        }
+
         static function updatePastDue()
         {
             $checked_out_copies = $GLOBALS['DB']->query("SELECT checkouts.* FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) WHERE copies.status = 'checked out';");

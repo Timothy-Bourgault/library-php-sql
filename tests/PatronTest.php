@@ -18,13 +18,13 @@
     class PatronTest extends PHPUnit_Framework_TestCase
     {
 
-        // protected function tearDown()
-        // {
-        //     Book::deleteAll();
-        //     Copy::deleteAll();
-        //     Author::deleteAll();
-        //     Patron::deleteAll();
-        // }
+        protected function tearDown()
+        {
+            Book::deleteAll();
+            Copy::deleteAll();
+            Author::deleteAll();
+            Patron::deleteAll();
+        }
 
         function test_getName()
         {

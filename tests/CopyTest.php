@@ -86,6 +86,22 @@
 
         }
 
+        function test_returnCopy()
+        {
+            $test_patron = new Patron("Bob Jones");
+            $test_patron->save();
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+            $test_author = new Author("Herman Melville");
+            $test_author->save();
 
+            $test_patron->checkoutCopy($test_book);
+            $copy = $test_book->getCopies()[0];
+            $copy->returnCopy();
+            $output = $copy->getStatus();
+
+            $this->assertEquals("available", $output);
+
+        }
     }
 ?>
