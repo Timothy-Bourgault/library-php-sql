@@ -137,10 +137,10 @@
 
         function getCopyInfo()
         {
-            $returned_info = $GLOBALS['DB']->query("SELECT * FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) WHERE (copies.book_id = {$this->id});");
+            $returned_info = $GLOBALS['DB']->query("SELECT copies.status, copies.id, checkouts.due_date, checkouts.patron_id FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) WHERE (copies.book_id = {$this->id});");
             $info_array = array();
             foreach($returned_info as $info){
-                $entry = array('status' => $info['copies.status'], 'copy_id' => $info['copies.id'], 'due_date' => $info['checkouts.due_date'], 'patron_id' => $info['checkouts.patron_id']);
+                $entry = array('status' => $info['status'], 'copy_id' => $info['id'], 'due_date' => $info['due_date'], 'patron_id' => $info['patron_id']);
                 array_push($info_array, $entry);
             }
             return $info_array;
@@ -152,11 +152,24 @@
             $found_book = null;
             foreach ($books as $book)
             {
-                if ($book->getId() == $search || $book->getTitle() == $search) {
+                if ($book->getId() == $search) {
                     $found_book = $book;
                 }
             }
             return $found_book;
+        }
+
+        static function searchTitle($term)
+        {
+            $books = Book::getAll();
+            $match_array = array();
+            foreach($books as $book){
+                $title = $book->getTitle();
+                if(strpos($title, $term) !== false){
+                    array_push($match_array, $book);
+                }
+            }
+            return $match_array;
         }
     }
 ?>

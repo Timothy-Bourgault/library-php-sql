@@ -79,23 +79,12 @@
             $this->assertEquals([], $output);
         }
 
-        function test_findId()
+        function test_find()
         {
             $test_book = new Book("Moby Dick");
             $test_book->save();
 
             $output = Book::find($test_book->getId());
-
-            $this->assertEquals($test_book, $output);
-
-        }
-
-        function test_findTitle()
-        {
-            $test_book = new Book("Moby Dick");
-            $test_book->save();
-
-            $output = Book::find($test_book->getTitle());
 
             $this->assertEquals($test_book, $output);
 
@@ -160,6 +149,20 @@
             $copy = $test_book->getCopies()[0];
             $result = $test_book->getCopyInfo();
             $this->assertEquals([['status' => 'checked out', 'copy_id' => $copy->getId(), 'due_date' => '2016-10-20', 'patron_id' => $test_patron->getId()]], $result);
+        }
+
+        function test_searchTitle()
+        {
+            $test_book1 = new Book("Moby Dick");
+            $test_book1->save();
+            $test_book2 = new Book("Goodnight Moon");
+            $test_book2->save();
+            $test_book3 = new Book("The Great Gatsby");
+            $test_book3->save();
+
+            $result = Book::searchTitle("Moon");
+
+            $this->assertEquals([$test_book2], $result);
         }
 
     }

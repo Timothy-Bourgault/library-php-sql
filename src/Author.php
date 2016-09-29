@@ -83,6 +83,11 @@
             $GLOBALS['DB']->exec("INSERT INTO authors_books (book_id, author_id) VALUES ({$new_book->getId()}, {$this->id});");
         }
 
+        function addBookById($book_id)
+        {
+            $GLOBALS['DB']->exec("INSERT INTO authors_books (book_id, author_id) VALUES ({$book_id}, {$this->id});");
+        }
+
         function getAuthorsBooks()
         {
             $returned_authors_books = $GLOBALS['DB']->query("SELECT books.* FROM authors

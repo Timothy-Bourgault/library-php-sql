@@ -5,20 +5,25 @@
     </head>
     <body>
         <h1>{{ book.getTitle }}</h1>
+        <a href="/">Back</a>
         {% for author in authors %}
             <h2>{{ author.getName }}</h2>
         {% endfor %}
         {% for copy in copies %}
-            <h2>{{ copy.id }} - {{ copy.status }}</h2>
+            <h2>{{ copy.copy_id }} - {{ copy.status }}
+            {% if copy.status == 'checked out' %}
+                -  Due: {{ copy.due_date }}
+                - Patron ID: {{ copy.patron_id }}
+            {% endif %}
+            </h2>
         {% endfor %}
-        <form action="index.html" method="post">
-            <label for="add_author">Add Author</label>
+        <form action="/book/{{ book.getId }}/add_author" method="post">
+            <label>Add Author</label>
             <select name="author_id" class="form-control">
                 {% for author in all_authors %}
                     <option value="{{ author.getId }}">{{ author.getName }}</option>
                 {% endfor %}
             </select>
-            <input type="hidden" name="book_id" value="{{ book.getId }}">
             <button type="submit" class="btn btn-success">Add</button>
         </form>
     </body>

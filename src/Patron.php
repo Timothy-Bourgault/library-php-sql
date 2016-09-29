@@ -92,5 +92,18 @@
                 return 0;
             }
         }
+
+        function getPatronHistory()
+        {
+            $patron = Patron::getAll();
+            $patron_history = array();
+            $return_patron_history = $GLOBALS['DB']->query("SELECT books.title, checkouts.due_date, copies.status, checkouts.copy_id FROM books JOIN copies ON (books.id = copies.book_id) JOIN checkouts ON (checkouts.copy_id = copies.id) WHERE checkouts.patron_id = {$this->id};");
+            foreach($return_patron_history as $history)
+                {
+                    $entry = array('title' => $history['title'], 'due_date' => $history['due_date'], 'status' => $history['status'], 'copy_id' => $history['copy_id']);
+                    array_push ($patron_history, $entry);
+                }
+            return $patron_history;
+        }
     }
 ?>

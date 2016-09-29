@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Library</title>
+    </head>
+    <body>
+        <h1>{{ patron.getName }}</h1>
+        <a href="/">Back</a>
+        {% for entry in patron_history_entries %}
+            <p>{{ entry.title }}, {{ entry.due_date }}, {{ entry.status }}, {{ entry.copy_id }}</p>
+            {% if entry.status == "checked out" %}
+                <a href="/patron/{{ patron.getId }}/return_copy/{{ entry.copy_id }}"><button type="submit" class="btn btn-primary">Mark Returned</button></a>
+            {% endif %}
+        {% endfor %}
+        <form action ='/patron/{{ patron.getId }}/checkout' method='post'>
+
+            <label>Check Out A Book</label>
+            <select name="book_id" class="form-control">
+                {% for book in all_books %}
+                    {% if book.getAvailableCopy %}
+                        <option value="{{ book.getId }}">{{ book.getTitle }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-success">Check Out</button>
+        </form>
+    </body>
+</html>
