@@ -118,6 +118,18 @@
             return null;
         }
 
+        function getCopies()
+        {
+            $copies = Copy::getAll();
+            $book_copies = array();
+            foreach ($copies as $copy){
+                if($copy->getBookId() == $this->id) {
+                    array_push($book_copies, $copy);
+                }
+            }
+            return $book_copies;
+        }
+
         static function find($search)
         {
             $books = Book::getAll();

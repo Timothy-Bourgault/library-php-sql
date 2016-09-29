@@ -86,7 +86,7 @@
             $due_date = $date->format('Y-m-d');
             if ($copy_id){
                 $GLOBALS['DB']->exec("INSERT INTO checkouts (copy_id, patron_id, due_date) VALUES ({$copy_id}, {$this->getId()}, '{$due_date}');");
-                $GLOBALS['DB']->exec("UPDATE copies SET status = 'unavailable' WHERE id = {$copy_id};");
+                $GLOBALS['DB']->exec("UPDATE copies SET status = 'checked out' WHERE id = {$copy_id};");
                 return 1;
             } else {
                 return 0;

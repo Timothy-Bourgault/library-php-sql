@@ -7,6 +7,10 @@
     //export PATH=$PATH:./vendor/bin
     //phpunit tests
     require_once "src/Copy.php";
+    require_once "src/Patron.php";
+    require_once "src/Book.php";
+    require_once "src/Copy.php";
+    require_once "src/Author.php";
     $server = 'mysql:host=localhost;dbname=library_test';
     $username = 'root';
     $password = 'root';
@@ -58,6 +62,28 @@
 
             //Assert
             $this->assertEquals([$test_copy, $test_copy2], $output);
+        }
+
+        function test_updatePastDue()
+        {
+            //Arrange
+            $test_patron = new Patron("Bob Jones");
+            $test_patron->save();
+            $test_book = new Book("Moby Dick");
+            $test_book->save();
+            $test_author = new Author("Herman Melville");
+            $test_author->save();
+
+            $test_patron->checkoutCopy($test_book);
+
+            //Act
+            Copy::updatePastDue();
+            $copy = $test_book->getCopies()[0];
+            $output = $copy->getStatus();
+
+            //Assert
+            $this->assertEquals('checked out', $output);
+
         }
 
 

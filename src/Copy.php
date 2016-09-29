@@ -90,10 +90,25 @@
             return $copy_ids;
         }
 
-        function updateCopyStatus()
+        function updateCopyStatus($new_status)
         {
-            $GLOBALS['DB']->query("SELECT * FROM checkouts WHERE copy_id = {$this->id}";);
+            $GLOBALS['DB']->exec("UPDATE copies SET status = '{$new_status}' WHERE id = {$this->id};");
+            $this->status = $new_status;
 
+        }
+
+        static function updatePastDue()
+        {
+            $checked_out_copies = $GLOBALS['DB']->query("SELECT checkouts.* FROM copies JOIN checkouts ON (copies.id = checkouts.copy_id) WHERE copies.status = 'checked out';");
+            $past_due_copies = array();
+            foreach ($checked_out_copies as $copy) {
+                $copy_id = $copy['copy_id'];
+                $today = new DateTime();
+                $due_date = new DateTime($copy['due_date']);
+                if ($today > $due_date) {
+                    $GLOBALS['DB']->exec("UPDATE copies SET status = 'past due' WHERE id = {$copy_id};");
+                }
+            }
         }
     }
 ?>
